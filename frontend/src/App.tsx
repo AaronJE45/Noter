@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import "./App.css";
-import { Note } from "./models/note";
+import { Note as NoteModel } from "./models/note";
+import Note from "./components/Note";
 
 function App() {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<NoteModel[]>([]);
 
   useEffect(() => {
     async function loadNotes() {
@@ -24,8 +24,10 @@ function App() {
 
   return (
     <>
-      <h1 className="text-6xl font-bold mb-[30px] text-white">Taker Notes</h1>
-      {JSON.stringify(notes)};
+      <h1 className="text-6xl font-bold mb-[30px] text-white">Noter</h1>
+      {notes.map((note) => (
+        <Note note={note} key={note._id} />
+      ))}
     </>
   );
 }
