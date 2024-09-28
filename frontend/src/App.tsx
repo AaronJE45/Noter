@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Note as NoteModel } from "./models/note";
 import Note from "./components/Note";
+import Navbar from "./components/Navbar.tsx";
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
@@ -24,10 +25,13 @@ function App() {
 
   return (
     <>
-      <h1 className="text-6xl font-bold mb-[30px] text-white">Noter</h1>
-      {notes.map((note) => (
-        <Note note={note} key={note._id} />
-      ))}
+      <Navbar />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 place-self-auto">
+        {notes.map((note) => (
+          <Note note={note} key={note._id} />
+        ))}
+      </div>
     </>
   );
 }
