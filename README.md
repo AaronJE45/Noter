@@ -13,4 +13,5 @@ This is a project that I am using to help me get started with MERN by following 
     - DaisyUI, Tailwind component library.
     - UI/UX changes
     - Vite instead of Create React app
+- Git version control
 
