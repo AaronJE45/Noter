@@ -21,20 +21,27 @@ export async function fetchNotes(): Promise<Note[]> {
   return response.json();
 }
 
-export interface NoteInput{
-    title: string;
-    text: string;
+export interface NoteInput {
+  title: string;
+  text: string;
 }
 
-export async function createNotes(note : NoteInput): Promise<Note>{
-    const response = await fetchData("/api/ntoes",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(note),
-        }
-    )
-    return response.json();
+export async function createNotes(note: NoteInput): Promise<Note> {
+  const response = await fetch("http://localhost:5000/api/notes", {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify(note),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+
+    throw new Error(`Failed to create note: ${errorText}`);
+  }
+
+  return response.json();
 }
