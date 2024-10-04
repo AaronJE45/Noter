@@ -39,13 +39,15 @@ const AddNoteDialog = ({ onNoteSaved }: AddNoteDialogProps) => {
   return (
     <>
       {/* Button to open the modal */}
-      <button className="btn" onClick={openModal}>
-        Add Note
-      </button>
+      <div className="flex flex-col items-center p-4">
+        <button className="btn rounded-lg" onClick={openModal}>
+          Add Note
+        </button>
+      </div>
 
       {/* Dialog modal */}
       <dialog ref={modalRef} id="my_modal_1" className="modal">
-        <div className="modal-box">
+        <div className="modal-box ">
           <h3 className="font-bold text-2xl text-center text-[#FF6500] ">
             Add notes
           </h3>

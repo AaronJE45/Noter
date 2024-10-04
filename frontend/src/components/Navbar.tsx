@@ -6,6 +6,7 @@ const Navbar = () => {
         <div className="navbar-start">
           <p className="btn btn-ghost text-2xl text-[#FF6500]">Noter by AJ</p>
         </div>
+        
         <div className="navbar-end">
           <button className="btn btn-ghost btn-circle">
             <svg

@@ -22,18 +22,30 @@ function App() {
     loadNotes(); // Call the function here
   }, []); // Dependency array is empty, so it runs once on mount
 
+  async function deleteNote(note:NoteModel){
+    try {
+      await NotesApi.deleteNote(note._id);
+      setNotes(notes.filter(existingNote => existingNote._id !== note._id));
+    } catch (error) {
+      console.log("Error deleting note", error);
+      alert("Error deleting note");
+    }
+  }
+
   return (
     <>
       <Navbar />
-      <AddNoteDialog onNoteSaved={() =>[]}/>
-      
+      <AddNoteDialog
+        onNoteSaved={(newNote) => {
+          setNotes([...notes, newNote]);
+        }}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 p-4 ">
         {notes.map((note) => (
-          <Note note={note} key={note._id} />
+          <Note note={note} key={note._id} onDeleteNoteClicked={deleteNote} />
         ))}
       </div>
-
-      
     </>
   );
 }
