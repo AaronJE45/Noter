@@ -3,21 +3,35 @@ import { Note } from "../models/note";
 import { useForm } from "react-hook-form";
 import { NoteInput } from "../network/notes_api";
 import * as NotesApi from "../network/notes_api";
+import { FaPlus } from "react-icons/fa6";
 
-interface AddNoteDialogProps {
+interface AddEditNoteDialogProps {
+  noteToEdit?: Note,
   onNoteSaved: (note: Note) => void;
 }
 
-const AddNoteDialog = ({ onNoteSaved }: AddNoteDialogProps) => {
+const AddEditNoteDialog = ({ onNoteSaved, noteToEdit}: AddEditNoteDialogProps) => {
   const {
     register,
-    handleSubmit,
+    handleSubmit, 
     formState: { isSubmitting },
-  } = useForm<NoteInput>();
+  } = useForm<NoteInput>({
+    defaultValues:{
+      title: noteToEdit?.title || "",
+      text: noteToEdit?.text
+    }
+  });
 
   async function onSubmit(input: NoteInput) {
     try {
-      const noteResponse = await NotesApi.createNotes(input);
+
+      let noteResponse: Note;
+
+      if(noteToEdit){
+        noteResponse = await NotesApi.updateNotes(noteToEdit._id, input);
+      }else{
+        noteResponse = await NotesApi.createNotes(input);
+      }
       onNoteSaved(noteResponse);
 
       modalRef.current?.close();
@@ -39,9 +53,9 @@ const AddNoteDialog = ({ onNoteSaved }: AddNoteDialogProps) => {
   return (
     <>
       {/* Button to open the modal */}
-      <div className="flex flex-col items-center p-4">
+      <div className="flex flex-col items-center">
         <button className="btn rounded-lg" onClick={openModal}>
-          Add Note
+          <FaPlus className="text-[#FF6500]" /> {noteToEdit ? "Edit Note" : "Add Note"}
         </button>
       </div>
 
@@ -53,7 +67,7 @@ const AddNoteDialog = ({ onNoteSaved }: AddNoteDialogProps) => {
           </h3>
 
           {/* Main form */}
-          <form id="addNoteForm" onSubmit={handleSubmit(onSubmit)}>
+          <form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
             <div className="p-4 flex flex-col gap-2">
               <div className="form-control">
                 <label htmlFor="note-title" className="label">
@@ -93,7 +107,7 @@ const AddNoteDialog = ({ onNoteSaved }: AddNoteDialogProps) => {
               {/* Save button */}
               <button
                 type="submit"
-                form="addNoteForm"
+                form="addEditNoteForm"
                 className="btn text-[#FF6500]"
                 disabled={isSubmitting}
               >
@@ -107,4 +121,4 @@ const AddNoteDialog = ({ onNoteSaved }: AddNoteDialogProps) => {
   );
 };
 
-export default AddNoteDialog;
+export default AddEditNoteDialog;

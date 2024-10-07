@@ -3,7 +3,7 @@ import { Note as NoteModel } from "./models/note";
 import Note from "./components/Note";
 import Navbar from "./components/Navbar.tsx";
 import * as NotesApi from "./network/notes_api";
-import AddNoteDialog from "./components/AddNoteDialog.tsx";
+import AddEditNoteDialog from "./components/AddEditNoteDialog.tsx";
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
@@ -22,10 +22,10 @@ function App() {
     loadNotes(); // Call the function here
   }, []); // Dependency array is empty, so it runs once on mount
 
-  async function deleteNote(note:NoteModel){
+  async function deleteNote(note: NoteModel) {
     try {
       await NotesApi.deleteNote(note._id);
-      setNotes(notes.filter(existingNote => existingNote._id !== note._id));
+      setNotes(notes.filter((existingNote) => existingNote._id !== note._id));
     } catch (error) {
       console.log("Error deleting note", error);
       alert("Error deleting note");
@@ -35,7 +35,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <AddNoteDialog
+      <AddEditNoteDialog
         onNoteSaved={(newNote) => {
           setNotes([...notes, newNote]);
         }}

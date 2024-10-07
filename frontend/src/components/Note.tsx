@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Note as NoteModel } from "../models/note";
 import { formatDate } from "../utils/formatDate";
 import { TbHttpDelete } from "react-icons/tb";
+ 
 
 interface NoteProps {
+  onNoteClicked?: (note: NoteModel) => void; 
   note: NoteModel;
   onDeleteNoteClicked: (noteId: NoteModel) => void;
 }
