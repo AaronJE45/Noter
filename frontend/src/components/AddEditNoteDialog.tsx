@@ -6,30 +6,32 @@ import * as NotesApi from "../network/notes_api";
 import { FaPlus } from "react-icons/fa6";
 
 interface AddEditNoteDialogProps {
-  noteToEdit?: Note,
+  noteToEdit?: Note | null;
   onNoteSaved: (note: Note) => void;
 }
 
-const AddEditNoteDialog = ({ onNoteSaved, noteToEdit}: AddEditNoteDialogProps) => {
+const AddEditNoteDialog = ({
+  onNoteSaved,
+  noteToEdit,
+}: AddEditNoteDialogProps) => {
   const {
     register,
-    handleSubmit, 
+    handleSubmit,
     formState: { isSubmitting },
   } = useForm<NoteInput>({
-    defaultValues:{
+    defaultValues: {
       title: noteToEdit?.title || "",
-      text: noteToEdit?.text
-    }
+      text: noteToEdit?.text,
+    },
   });
 
   async function onSubmit(input: NoteInput) {
     try {
-
       let noteResponse: Note;
 
-      if(noteToEdit){
+      if (noteToEdit) {
         noteResponse = await NotesApi.updateNotes(noteToEdit._id, input);
-      }else{
+      } else {
         noteResponse = await NotesApi.createNotes(input);
       }
       onNoteSaved(noteResponse);
@@ -55,7 +57,8 @@ const AddEditNoteDialog = ({ onNoteSaved, noteToEdit}: AddEditNoteDialogProps) =
       {/* Button to open the modal */}
       <div className="flex flex-col items-center">
         <button className="btn rounded-lg" onClick={openModal}>
-          <FaPlus className="text-[#FF6500]" /> {noteToEdit ? "Edit Note" : "Add Note"}
+          <FaPlus className="text-[#FF6500]" />{" "}
+          {noteToEdit ? "Edit Note" : "Add Note"}
         </button>
       </div>
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Note as NoteModel } from "./models/note";
 import Note from "./components/Note";
-import Navbar from "./components/Navbar.tsx";
+import Navbar from "./components/Navbar";
 import * as NotesApi from "./network/notes_api";
-import AddEditNoteDialog from "./components/AddEditNoteDialog.tsx";
+import AddEditNoteDialog from "./components/AddEditNoteDialog";
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
+  const [notesToEdit, setNotesToEdit] = useState<NoteModel | null>(null);
 
   useEffect(() => {
     async function loadNotes() {
@@ -19,8 +20,8 @@ function App() {
       }
     }
 
-    loadNotes(); // Call the function here
-  }, []); // Dependency array is empty, so it runs once on mount
+    loadNotes(); 
+  }, []);
 
   async function deleteNote(note: NoteModel) {
     try {
@@ -37,13 +38,24 @@ function App() {
       <Navbar />
       <AddEditNoteDialog
         onNoteSaved={(newNote) => {
-          setNotes([...notes, newNote]);
+          if (notesToEdit) {
+            setNotes(notes.map(note => note._id === newNote._id ? newNote : note));
+            setNotesToEdit(null); 
+          } else {
+            setNotes([...notes, newNote]);
+          }
         }}
+        noteToEdit={notesToEdit} 
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 p-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 p-4">
         {notes.map((note) => (
-          <Note note={note} key={note._id} onDeleteNoteClicked={deleteNote} />
+          <Note
+            note={note}
+            key={note._id}
+            onDeleteNoteClicked={deleteNote}
+            onNoteClicked={setNotesToEdit}
+          />
         ))}
       </div>
     </>
