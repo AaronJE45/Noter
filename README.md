@@ -1,4 +1,4 @@
-# Note Taking application
+# Noter
 
 ## A note taking application built using MongoDB, Express, React and Node.js
 
